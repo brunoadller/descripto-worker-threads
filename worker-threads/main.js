@@ -1,9 +1,8 @@
 const {Worker, isMainThread, parentPort, workerData} = require('worker_threads')
 const crypto = require('crypto')
-const alphabet = 'abcdefghijklmnopqrstuvwxyz'
-const  targetHash = '5d41402abc4b2a76b9719d911017c592'
+const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
+const  targetHash = '900150983cd24fb0d6963f7d28e17f72'
 const stringResult = []
-const fibonacci = require('./fibonacci')
 
 /**
  * UM PROCESSO ABRE MULTIPLAS THREADS
@@ -15,9 +14,8 @@ const main = async () => {
         console.time("performance")
         //desta forma a execução fica paralela
         const result = await Promise.all([
-            execute(5)
+            execute(3)
         ])
-        console.log(result)
         console.timeEnd("performance")
 
     }//SE NÃO ESTIVER NA MAINTHREAD ESTARÁ NO WORKER, PORTANTO QUALQUER NUMBER
