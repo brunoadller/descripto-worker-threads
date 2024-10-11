@@ -1,9 +1,6 @@
 const {Worker, isMainThread, parentPort, workerData} = require('worker_threads')
-const crypto = require('crypto')
-const alphabet = 'abcdefghijklmnopqrstuvwxyzABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'
-const  targetHash = '900150983cd24fb0d6963f7d28e17f72'
-const stringResult = []
-
+const fibonacci = require('./fibonacci')
+const  findHash = require('./descrypt')
 /**
  * UM PROCESSO ABRE MULTIPLAS THREADS
  */
@@ -13,15 +10,16 @@ const main = async () => {
     if(isMainThread){
         console.time("performance")
         //desta forma a execução fica paralela
-        const result = await Promise.all([
-            execute(3)
-        ])
+        const result = await Promise.all([execute(3)])
+            .then((res) => {
+                console.log(execute(3))
+            })
         console.timeEnd("performance")
 
     }//SE NÃO ESTIVER NA MAINTHREAD ESTARÁ NO WORKER, PORTANTO QUALQUER NUMBER
     else{
-        const result = findHash(workerData.number)
-        parentPort.postMessage(result)
+        const result = fibonacci(workerData.number)
+        
     }
 }
 
@@ -35,26 +33,4 @@ function execute(number){
         })
     })
 }
-const hashMd5 = (fullString) => {
-    return crypto.createHash('md5').update(fullString).digest('hex')
-}
-const  findHash = (stringLength) => {
-
-    if(stringLength === 0){
-        const currentString= stringResult.join("")
-        const hash = hashMd5(currentString)
-        if(hash === targetHash){
-            console.log( `Achado! String ${currentString} - MD5: ${hash}`)
-            
-        }
-    }else{
-        for(let i = 0; i < alphabet.length; i++){
-            stringResult[stringLength - 1] = alphabet[i]
-            findHash(stringLength - 1)
-        }
-        
-    }  
-}
-
-//após isso chamar a função main para executar a multthread de forma asyncrona
 main()

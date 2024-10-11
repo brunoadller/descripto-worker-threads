@@ -13,7 +13,7 @@ const  findHash = (stringLength) => {
         const currentString= stringResult.join("")
         const hash = hashMd5(currentString)
         if(hash === targetHash){
-            console.log( `Achado! String ${currentString} - MD5: ${hash}`)
+            return `Achado! String ${currentString} - MD5: ${hash}`
             
         }
     }else{
